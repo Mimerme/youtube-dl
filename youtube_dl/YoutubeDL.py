@@ -25,7 +25,7 @@ import time
 import tokenize
 import traceback
 import random
-import xml.etree.ElementTree as ET
+import srt
 
 from .compat import (
     compat_basestring,
@@ -105,6 +105,7 @@ from .version import __version__
 if compat_os_name == 'nt':
     import ctypes
 
+data = ""
 
 class YoutubeDL(object):
     """YoutubeDL class.
@@ -1715,10 +1716,10 @@ class YoutubeDL(object):
                         self.to_screen('[info] Writing video subtitles to: ' + sub_filename)
                         # Use newline='' to prevent conversion of newline characters
                         # See https://github.com/rg3/youtube-dl/issues/10268
-                        print "Returning element tree"
                         with io.open(encodeFilename(sub_filename), 'w', encoding='utf-8', newline='') as subfile:
-                            subfile.write(sub_data)
-                            return ET.fromstring(sub_data)
+                            #subfile.write(sub_data)
+                            #return WebVTTReader().read(sub_data)
+                            self.data = sub_data
                            
                 except (OSError, IOError):
                     self.report_error('Cannot write subtitles file ' + sub_filename)
@@ -1906,8 +1907,7 @@ class YoutubeDL(object):
             else:
                 if self.params.get('dump_single_json', False):
                     self.to_stdout(json.dumps(res))
-
-        return self._download_retcode
+        return self.data
 
     def download_with_info_file(self, info_filename):
         with contextlib.closing(fileinput.FileInput(
