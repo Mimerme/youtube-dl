@@ -25,7 +25,6 @@ import time
 import tokenize
 import traceback
 import random
-import srt
 
 from .compat import (
     compat_basestring,
